@@ -5,6 +5,7 @@
 ```bash
 docker-compose build
 docker-compose up
+```
 
 
 ->Open http://localhost:5173 for the frontend
@@ -17,19 +18,23 @@ Run backend and frontend separately (without Docker)
 
 Backend
 Open a new terminal:
+
+```
 cd backend
 npm install
 npm run build
 npm start
+```
 
 ->API runs on http://localhost:4000
 
 Frontend
 Open a new terminal:
-
+```
 cd frontend
 npm install
 npm run dev
+```
 
 ->App runs on http://localhost:5173
 
