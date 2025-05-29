@@ -13,10 +13,16 @@ function pawnMoves(board: Board, from: [number, number], color: Color): Move[] {
   const [r, c] = from
   const d = color === "w" ? -1 : 1
   const out: Move[] = []
+  console.log("Checking pawn moves for", color, "from", from)
+
   if (board[r + d] && board[r + d][c] === null) {
     out.push({ from, to: [r + d, c] })
+    console.log("Single forward:", [r + d, c])
     if ((color === "w" && r === 6) || (color === "b" && r === 1)) {
-      if (board[r + 2 * d][c] === null) out.push({ from, to: [r + 2 * d, c] })
+      if (board[r + 2 * d] && board[r + 2 * d][c] === null) {
+        out.push({ from, to: [r + 2 * d, c] })
+        console.log("Double forward:", [r + 2 * d, c])
+      }
     }
   }
   for (const dc of [-1, 1]) {
@@ -27,10 +33,15 @@ function pawnMoves(board: Board, from: [number, number], color: Color): Move[] {
       board[r + d][c + dc]?.color !== color
     ) {
       out.push({ from, to: [r + d, c + dc] })
+      console.log("Capture move:", [r + d, c + dc])
     }
   }
+  console.log("Legal pawn moves:", out)
   return out
 }
+
+
+
 
 function rookMoves(board: Board, from: [number, number], color: Color): Move[] {
   const [r, c] = from
