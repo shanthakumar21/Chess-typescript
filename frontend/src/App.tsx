@@ -27,6 +27,19 @@ export default function App() {
   const [selected, setSelected] = useState<[number, number] | null>(null)
   const [message, setMessage] = useState("")
 
+  // Responsive board size
+  const [boardSize, setBoardSize] = useState(0)
+  useEffect(() => {
+    function handleResize() {
+      // Fit to 90% of viewport min dimension, up to a max (e.g., 600px)
+      const size = Math.min(window.innerWidth, window.innerHeight) * 0.9
+      setBoardSize(Math.min(size, 600))
+    }
+    handleResize()
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
   useEffect(() => {
     axios.post(`${backendUrl}/start`).then(res => {
       setBoard(res.data.board)
@@ -54,9 +67,13 @@ export default function App() {
     }
   }
 
+  // Calculate square size for responsive board
+  const squareSize = boardSize / 8
+
   return (
     <div style={{
       minHeight: "100vh",
+      minWidth: "100vw",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -64,7 +81,7 @@ export default function App() {
     }}>
       <div style={{
         background: "#262523",
-        padding: 32,
+        padding: 24,
         borderRadius: 20,
         boxShadow: "0 2px 32px #0006",
         display: "flex",
@@ -85,11 +102,14 @@ export default function App() {
         <div style={{ color: "#e66", marginBottom: 16, minHeight: 24, fontSize: 16 }}>{message}</div>
         <div style={{
           display: "grid",
-          gridTemplateRows: "repeat(8, 56px)",
-          gridTemplateColumns: "repeat(8, 56px)",
+          gridTemplateRows: `repeat(8, ${squareSize}px)`,
+          gridTemplateColumns: `repeat(8, ${squareSize}px)`,
           border: "5px solid #384930",
           borderRadius: 14,
-          boxShadow: "0 4px 16px #2227"
+          boxShadow: "0 4px 16px #2227",
+          width: boardSize,
+          height: boardSize,
+          background: "#384930"
         }}>
           {board.map((row, i) =>
             row.map((piece, j) => {
@@ -100,9 +120,9 @@ export default function App() {
                   key={`${i}-${j}`}
                   onClick={() => handleSquareClick(i, j)}
                   style={{
-                    width: 56, height: 56, display: "flex",
+                    width: squareSize, height: squareSize, display: "flex",
                     alignItems: "center", justifyContent: "center",
-                    fontSize: 34, background: color, border: "1px solid #444",
+                    fontSize: squareSize * 0.65, background: color, border: "1px solid #444",
                     cursor: "pointer", userSelect: "none", transition: "background 0.2s", ...selectedStyle
                   }}>
                   <span style={{
@@ -116,7 +136,6 @@ export default function App() {
               )
             })
           )}
-
         </div>
       </div>
     </div>
