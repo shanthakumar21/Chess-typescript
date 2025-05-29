@@ -89,23 +89,11 @@ function bishopMoves(board: Board, from: [number, number], color: Color): Move[]
 }
 
 function queenMoves(board: Board, from: [number, number], color: Color): Move[] {
-  const [r, c] = from
-  const out: Move[] = []
-  for (const [dr, dc] of [[1,0], [-1,0], [0,1], [0,-1], [1,1], [1,-1], [-1,1], [-1,-1]]) {
-    let rr = r + dr, cc = c + dc
-    while (rr >= 0 && rr < 8 && cc >= 0 && cc < 8) {
-      if (!board[rr][cc]) out.push({ from, to: [rr, cc] })
-      else {
-        if (board[rr][cc]?.color !== color) out.push({ from, to: [rr, cc] })
-        break
-      }
-      rr += dr
-      cc += dc
-    }
-  }
-  return out
+  return [
+    ...rookMoves(board, from, color),
+    ...bishopMoves(board, from, color)
+  ]
 }
-
 
 function kingMoves(board: Board, from: [number, number], color: Color): Move[] {
   const [r, c] = from
