@@ -8,6 +8,8 @@ export function getLegalMoves(board: Board, from: [number, number]): Move[] {
   if (piece.type === "R") return rookMoves(board, from, piece.color)
   if (piece.type === "N") return knightMoves(board, from, piece.color)
   if (piece.type === "B") return bishopMoves(board, from, piece.color)
+  if (piece.type === "Q") return queenMoves(board, from, piece.color)
+  if (piece.type === "K") return kingMoves(board, from, piece.color)
   return []
 }
 
@@ -81,6 +83,42 @@ function bishopMoves(board: Board, from: [number, number], color: Color): Move[]
       }
       rr += dr
       cc += dc
+    }
+  }
+  return out
+}
+
+function queenMoves(board: Board, from: [number, number], color: Color): Move[] {
+  const [r, c] = from
+  const out: Move[] = []
+  for (const [dr, dc] of [[1,0], [-1,0], [0,1], [0,-1], [1,1], [1,-1], [-1,1], [-1,-1]]) {
+    let rr = r + dr, cc = c + dc
+    while (rr >= 0 && rr < 8 && cc >= 0 && cc < 8) {
+      if (!board[rr][cc]) out.push({ from, to: [rr, cc] })
+      else {
+        if (board[rr][cc]?.color !== color) out.push({ from, to: [rr, cc] })
+        break
+      }
+      rr += dr
+      cc += dc
+    }
+  }
+  return out
+}
+
+
+function kingMoves(board: Board, from: [number, number], color: Color): Move[] {
+  const [r, c] = from
+  const out: Move[] = []
+  for (const dr of [-1, 0, 1]) {
+    for (const dc of [-1, 0, 1]) {
+      if (dr === 0 && dc === 0) continue
+      const rr = r + dr, cc = c + dc
+      if (rr >= 0 && rr < 8 && cc >= 0 && cc < 8) {
+        if (!board[rr][cc] || board[rr][cc]?.color !== color) {
+          out.push({ from, to: [rr, cc] })
+        }
+      }
     }
   }
   return out
