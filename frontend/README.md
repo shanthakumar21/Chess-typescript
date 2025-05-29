@@ -1,54 +1,48 @@
-# React + TypeScript + Vite
+ # Chess TypeScript App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Run the whole app (backend + frontend) with Docker Compose
 
-Currently, two official plugins are available:
+```bash
+docker-compose build
+docker-compose up
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+->Open http://localhost:5173 for the frontend
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+->Open http://localhost:4000 for the backend API
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Run backend and frontend separately (without Docker)
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+Backend
+Open a new terminal:
+cd backend
+npm install
+npm run build
+npm start
+
+->API runs on http://localhost:4000
+
+Frontend
+Open a new terminal:
+
+cd frontend
+npm install
+npm run dev
+
+->App runs on http://localhost:5173
+
+
+API Endpoints (Backend)
+POST /start — Start or restart a game
+
+POST /move — Make a move (send JSON: { "from": [row, col], "to": [row, col] })
+
+GET /game — Get the current board
+
+
+How to use
+Go to http://localhost:5173 in your browser to play chess in the UI
+
+All logic is TypeScript, both backend and frontend
